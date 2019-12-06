@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "421291324404",
+    "firebase_url": "https://battleship-firebase-gwyrwch.firebaseio.com",
+    "project_id": "battleship-firebase-gwyrwch",
+    "storage_bucket": "battleship-firebase-gwyrwch.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421291324404:android:cc1e176025ee1cca4cbfa1",
+        "android_client_info": {
+          "package_name": "com.example.battleship"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "421291324404-om8tg9kgp4ukcumeqoksgtaffj0pfldl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFxHEkF3YibgQhbtGRWUUXhaIW29XjUqE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "421291324404-om8tg9kgp4ukcumeqoksgtaffj0pfldl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
