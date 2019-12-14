@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FieldGridView">
+        <attr name="count" format="integer"/>
+        <attr name="fieldColor" format="color"/>
+        <attr name="gameInitialize" format="boolean"/>
+<!--        <attr name="showText" format="boolean" />-->
+<!--        <attr name="labelPosition" format="enum">-->
+<!--            <enum name="left" value="0"/>-->
+<!--            <enum name="right" value="1"/>-->
+<!--        </attr>-->
+    </declare-styleable>
+</resources>

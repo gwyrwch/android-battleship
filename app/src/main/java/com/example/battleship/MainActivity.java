@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         mSignOutButton = findViewById(R.id.button_sign_out);
         mSignOutButton.setOnClickListener(this);
 
+        findViewById(R.id.button_stats).setOnClickListener(this);
+        findViewById(R.id.button_new_game).setOnClickListener(this);
     }
 
 //    @Override
@@ -101,6 +103,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public void onClick(View v) {
+        System.out.println(v.getId());
+        System.out.println(R.id.button_new_game);
+
         switch (v.getId()) {
             case R.id.button_sign_out:
                 mFirebaseAuth.signOut();
@@ -110,6 +115,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 finish();
                 break;
             case R.id.button_new_game:
+                startActivity(new Intent(this, GameActivity.class));
+                finish();
                 break;
             case R.id.button_stats:
                 break;
