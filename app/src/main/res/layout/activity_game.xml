@@ -1,19 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:custom="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".GameActivity"
-android:orientation="horizontal">
-
-<com.example.battleship.FieldGridView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="389dp"
-    android:padding="20dp"
-    custom:fieldColor="#2196F3"
-    android:id="@+id/put_ships_field"
+    android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    tools:context=".GameActivity"
+    android:orientation="vertical">
 
-    custom:gameInitialize="true" />
+    <com.example.battleship.FieldGridView
+        android:id="@+id/game_field"
+        android:layout_width="match_parent"
+        android:layout_height="310dp"
+        android:padding="20dp"
+        custom:fieldColor="#2196F3"
+
+        custom:gameInitialize="false" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:orientation="horizontal">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_view_game_state"
+                android:text="First player move"
+                android:textSize="20dp"
+                android:layout_marginStart="20dp">
+
+            </com.google.android.material.textview.MaterialTextView>
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_view_players_connected"
+                android:text="1"
+                android:textSize="20dp"
+                android:layout_marginStart="20dp">
+
+            </com.google.android.material.textview.MaterialTextView>
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -8,9 +8,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -115,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 finish();
                 break;
             case R.id.button_new_game:
-                startActivity(new Intent(this, GameActivity.class));
+                startActivity(new Intent(this, GamePrepareActivity.class));
                 finish();
                 break;
             case R.id.button_stats:

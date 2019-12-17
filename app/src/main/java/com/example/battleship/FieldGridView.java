@@ -3,6 +3,7 @@ package com.example.battleship;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -10,29 +11,46 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class FieldGridView extends View {
-    Paint mFieldPaint;
+import java.util.List;
+
+public class FieldGridView extends View implements UpdateListener {
+    Paint mFieldPaint, mBluePaint, mRedPaint;
     private RectF mFieldLeft = new RectF();
     private RectF mFieldRight = new RectF();
     int width, height;
 
-    public boolean isGameInit() {
-        return gameInit;
-    }
-
     boolean gameInit;
 
     GameInitializer gameInitializer;
-
     public void setGameInitializer(GameInitializer gameInitializer) {
         this.gameInitializer = gameInitializer;
+        this.gameInitializer.setUpdateListener(this);
     }
 
+    Game game;
+    Game.GameState role;
+    List<Rect> myShips;
+    public void setRoleAndShips(int role, List<Rect> myShips) {
+        this.role = role == 1 ? Game.GameState.FIRST_MOVE : Game.GameState.SECOND_MOVE;
+        this.myShips = myShips;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+        onUpdate();
+    }
+
+    private MakeMoveHandler makeMoveHandler;
+    public void setMakeMoveHandler(MakeMoveHandler h) {
+        this.makeMoveHandler = h;
+    }
 
     public FieldGridView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         gameInitializer = null;
+        role = null;
+        myShips = null;
 
         TypedArray args = getContext().obtainStyledAttributes(attrs, R.styleable.FieldGridView);
         mFieldPaint = new Paint();
@@ -40,6 +58,17 @@ public class FieldGridView extends View {
         mFieldPaint.setAntiAlias(true);
         mFieldPaint.setStyle(Paint.Style.STROKE);
         mFieldPaint.setStrokeWidth(5);
+
+        mRedPaint = new Paint();
+        mRedPaint.setColor(Color.RED);
+        mRedPaint.setAntiAlias(true);
+        mRedPaint.setStyle(Paint.Style.STROKE);
+        mRedPaint.setStrokeWidth(5);
+
+        mBluePaint = new Paint();
+        mBluePaint.setColor(args.getColor(R.styleable.FieldGridView_fieldColor, 0));
+        mBluePaint.setAntiAlias(true);
+        mBluePaint.setStyle(Paint.Style.FILL);
 
         gameInit = args.getBoolean(R.styleable.FieldGridView_gameInitialize, false);
 
@@ -52,18 +81,7 @@ public class FieldGridView extends View {
 
         width = getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec);
         height = getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec);
-//        final int min = Math.min(width, height);
 
-//        mTranslateX = (int) (width);
-//        mTranslateY = (int) (height);
-
-
-
-//        float top = height / 2 - (arcDiameter / 2);
-//        float left = width / 2 - (arcDiameter / 2);
-//        mArcRect.set(left, top, left + arcDiameter, top + arcDiameter);
-//
-//        updateIndicatorIconPosition();
         float proposedRight = getPaddingLeft() + (width - getPaddingRight() - getPaddingLeft()) * (float)4/9;
         float proposedBottom = height - getPaddingBottom();
         float real = Math.min(proposedRight, proposedBottom);
@@ -102,13 +120,66 @@ public class FieldGridView extends View {
                 float horY = (float)i / 10 * mFieldRight.height() + mFieldRight.top;
                 canvas.drawLine(mFieldRight.left, horY, mFieldRight.right, horY, mFieldPaint);
             }
+
+
+            if (role != null && myShips != null) {
+                for (Rect ship : myShips) {
+                    drawShip(canvas, mFieldLeft, ship.left, ship.top, ship.right, ship.bottom);
+                }
+            } else {
+                System.out.println("ships or role null");
+            }
+
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 10; j++) {
+                    if (role == Game.GameState.FIRST_MOVE) {
+                        switch (game.mField1.get(i).get(j)) {
+                            case MISS:
+                                drawMiss(canvas, mFieldLeft, i, j);
+                                break;
+                            case HIT:
+                                drawHit(canvas, mFieldLeft, i, j);
+                                break;
+                        }
+
+                        switch (game.mField2.get(i).get(j)) {
+                            case MISS:
+                                drawMiss(canvas, mFieldRight, i, j);
+                                break;
+                            case HIT:
+                                drawHit(canvas, mFieldRight, i, j);
+                                break;
+                        }
+                    } else {
+                        switch (game.mField2.get(i).get(j)) {
+                            case MISS:
+                                drawMiss(canvas, mFieldLeft, i, j);
+                                break;
+                            case HIT:
+                                drawHit(canvas, mFieldLeft, i, j);
+                                break;
+                        }
+                        switch (game.mField1.get(i).get(j)) {
+                            case MISS:
+                                drawMiss(canvas, mFieldRight, i, j);
+                                break;
+                            case HIT:
+                                drawHit(canvas, mFieldRight, i, j);
+                                break;
+                        }
+                    }
+                }
+            }
         } else {
             for (int i = 1; i <= 4; i++) {
                 int countThisShip = 4 - i + 1;
                 if (gameInitializer != null) {
                     countThisShip = gameInitializer.getLeftCount(i);
                 }
-                drawShip(canvas, mFieldRight, i * 2 - 1, 2, i * 2 - 1, 2 + i - 1);
+
+                if (countThisShip != 0) {
+                    drawShip(canvas, mFieldRight, i * 2 - 1, 2, i * 2 - 1, 2 + i - 1);
+                }
 
                 if (gameInitializer != null) {
                     for (Rect ship : gameInitializer.getShips()) {
@@ -122,6 +193,19 @@ public class FieldGridView extends View {
     void drawShip(Canvas canvas, RectF rect, int x1, int y1, int x2, int y2) {
         canvas.drawRoundRect(getCornerX(rect, x1), getCornerY(rect, y1), getCornerX(rect, x2 + 1), getCornerY(rect, y2 + 1),
                 50, 50, mFieldPaint);
+    }
+
+    void drawHit(Canvas canvas, RectF rect, int x, int y) {
+        canvas.drawLine(getCornerX(rect, x), getCornerY(rect, y),
+                getCornerX(rect, x + 1), getCornerY(rect, y + 1), mRedPaint);
+
+        canvas.drawLine(getCornerX(rect, x + 1), getCornerY(rect, y),
+                getCornerX(rect, x), getCornerY(rect, y + 1), mRedPaint);
+    }
+
+    void drawMiss(Canvas canvas, RectF rect, int x, int y) {
+        canvas.drawRect(getCornerX(rect, x), getCornerY(rect, y),
+                getCornerX(rect, x + 1), getCornerY(rect, y + 1), mBluePaint);
     }
 
     @Override
@@ -139,18 +223,36 @@ public class FieldGridView extends View {
 //                updateOnTouch(event);
                 break;
             case MotionEvent.ACTION_UP:
-//                if (mOnSwagPointsChangeListener != null)
-//                    mOnSwagPointsChangeListener.onStopTrackingTouch(this);
-//                setPressed(false);
-//                this.getParent().requestDisallowInterceptTouchEvent(false);
+                if (mFieldRight.contains(event.getX(), event.getY())) {
+                    float unitDistance = mFieldRight.width() / 10;
+
+                    float x = event.getX() - mFieldRight.left;
+                    float y = event.getY() - mFieldRight.top;
+
+                    x /= unitDistance;
+                    y /= unitDistance;
+
+                    int i  = (int)(x);
+                    int j  = (int)(y);
+
+                    if (game.gameState == role) {
+                        boolean ok = game.makeMove(role, i, j);
+
+                        if (makeMoveHandler != null && ok) {
+                            makeMoveHandler.makeMove(game, i, j);
+                        }
+                        onUpdate();
+                    }
+                }
                 break;
             case MotionEvent.ACTION_CANCEL:
-//                if (mOnSwagPointsChangeListener != null)
-//                    mOnSwagPointsChangeListener.onStopTrackingTouch(this);
-//                setPressed(false);
-//                this.getParent().requestDisallowInterceptTouchEvent(false);
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onUpdate() {
+        invalidate();
     }
 }
