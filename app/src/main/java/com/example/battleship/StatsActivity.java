@@ -36,9 +36,10 @@ public class StatsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stats);
 
         Intent intent = getIntent();
-        final String username = intent.getStringExtra("username");
         String userId = intent.getStringExtra("userId");
         wins = intent.getIntExtra("win", 0);
+
+        System.out.println("Opened stats with "  +  userId + "; wins = " + wins);
 
 
         usernameTextView = findViewById(R.id.usernameTextView);

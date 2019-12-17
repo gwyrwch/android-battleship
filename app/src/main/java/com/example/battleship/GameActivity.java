@@ -88,12 +88,20 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
                 }
 
                 if (updated_game.finished) {
+                    int winner = 0;
+                    if (updated_game.gameState == gridView.role) {
+                        winner = 1;
+                    } else {
+                        winner = 2;
+                    }
+                    System.out.println("I " + (winner == 1 ? "WIN" : "LOSE") + mFirebaseUser.getUid());
                     Intent intent = new Intent(GameActivity.this, StatsActivity.class);
-                    intent.putExtra("win", 1);
+                    intent.putExtra("win", winner);
                     intent.putExtra("username", mFirebaseUser.getEmail());
                     intent.putExtra("userId", mFirebaseUser.getUid());
                     startActivity(intent);
                     finish();
+                    return;
                 }
 
                 boolean anything_changed = false;
@@ -133,20 +141,15 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
                     }
                 }
 
-                if (anything_changed) {
-                    if (shipsKilled == 10) {
-                        updated_game.finished = true;
-                    }
-                    mGameReference.setValue(updated_game);
 
-                    if(updated_game.finished) {
-                        Intent intent = new Intent(GameActivity.this, StatsActivity.class);
-                        intent.putExtra("win", 2);
-                        intent.putExtra("username", mFirebaseUser.getEmail());
-                        intent.putExtra("userId", mFirebaseUser.getUid());
-                        startActivity(intent);
-                        finish();
-                    }
+                if (shipsKilled == 10) {
+                    updated_game.finished = true;
+                    anything_changed = true;
+                }
+
+                if (anything_changed) {
+                    mGameReference.setValue(updated_game);
+                    return;
                 }
 
                 TextView v = findViewById(R.id.text_view_game_state);
