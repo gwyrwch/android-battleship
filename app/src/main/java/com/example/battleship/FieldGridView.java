@@ -14,7 +14,7 @@ import android.view.View;
 import java.util.List;
 
 public class FieldGridView extends View implements UpdateListener {
-    Paint mFieldPaint, mBluePaint, mRedPaint;
+    Paint mFieldPaint, mBluePaint, mRedPaint, mShipPaint;
     private RectF mFieldLeft = new RectF();
     private RectF mFieldRight = new RectF();
     int width, height;
@@ -58,6 +58,12 @@ public class FieldGridView extends View implements UpdateListener {
         mFieldPaint.setAntiAlias(true);
         mFieldPaint.setStyle(Paint.Style.STROKE);
         mFieldPaint.setStrokeWidth(5);
+
+        mShipPaint = new Paint();
+        mShipPaint.setColor(getResources().getColor(R.color.colorAccent));
+        mShipPaint.setAntiAlias(true);
+        mShipPaint.setStyle(Paint.Style.STROKE);
+        mShipPaint.setStrokeWidth(10);
 
         mRedPaint = new Paint();
         mRedPaint.setColor(Color.RED);
@@ -192,7 +198,7 @@ public class FieldGridView extends View implements UpdateListener {
 
     void drawShip(Canvas canvas, RectF rect, int x1, int y1, int x2, int y2) {
         canvas.drawRoundRect(getCornerX(rect, x1), getCornerY(rect, y1), getCornerX(rect, x2 + 1), getCornerY(rect, y2 + 1),
-                50, 50, mFieldPaint);
+                50, 50, mShipPaint);
     }
 
     void drawHit(Canvas canvas, RectF rect, int x, int y) {

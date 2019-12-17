@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".StatsActivity"></activity>
+        <activity android:name=".StatsActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".GameActivity"
             android:screenOrientation="landscape" />

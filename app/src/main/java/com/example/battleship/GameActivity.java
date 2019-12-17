@@ -69,11 +69,9 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
 
         if (role == 1) {
             mGameReference.setValue(emptyGame);
-            // set my field to database
             mGameReference.child("mField1").setValue(updateFieldWithShips(emptyGame.mField1, ships));
             mGameReference.child("playersConnected").setValue(1);
         } else {
-            // set my field to database
             mGameReference.child("mField2").setValue(updateFieldWithShips(emptyGame.mField2, ships));
             mGameReference.child("playersConnected").setValue(2);
         }
@@ -88,7 +86,7 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
                 }
 
                 if (updated_game.finished) {
-                    int winner = 0;
+                    int winner;
                     if (updated_game.gameState == gridView.role) {
                         winner = 1;
                     } else {
