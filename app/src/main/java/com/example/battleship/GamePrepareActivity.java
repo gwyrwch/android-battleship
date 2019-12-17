@@ -42,6 +42,7 @@ public class GamePrepareActivity extends AppCompatActivity implements View.OnCli
 
         TextView v = findViewById(R.id.edit_text_game_id);
         myGameId = mFirebaseUser.getUid().substring(0, 5);
+
         v.setText(myGameId);
 
         findViewById(R.id.button_rundomize).setOnClickListener(this);

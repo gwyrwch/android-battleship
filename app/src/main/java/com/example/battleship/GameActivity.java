@@ -45,7 +45,7 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
         setContentView(R.layout.activity_game);
 
         Intent intent = getIntent();
-        String gameId = intent.getStringExtra("gameId");
+        final String gameId = intent.getStringExtra("gameId");
         int role = intent.getIntExtra("role", -1);
 
         if (gameId == null) throw new AssertionError("Game id is null");
@@ -88,7 +88,12 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
                 }
 
                 if (updated_game.finished) {
-                    // todo: return from activity winner
+                    Intent intent = new Intent(GameActivity.this, StatsActivity.class);
+                    intent.putExtra("win", 1);
+                    intent.putExtra("username", mFirebaseUser.getEmail());
+                    intent.putExtra("userId", mFirebaseUser.getUid());
+                    startActivity(intent);
+                    finish();
                 }
 
                 boolean anything_changed = false;
@@ -134,7 +139,14 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
                     }
                     mGameReference.setValue(updated_game);
 
-                    // todo: return from activity loser
+                    if(updated_game.finished) {
+                        Intent intent = new Intent(GameActivity.this, StatsActivity.class);
+                        intent.putExtra("win", 2);
+                        intent.putExtra("username", mFirebaseUser.getEmail());
+                        intent.putExtra("userId", mFirebaseUser.getUid());
+                        startActivity(intent);
+                        finish();
+                    }
                 }
 
                 TextView v = findViewById(R.id.text_view_game_state);

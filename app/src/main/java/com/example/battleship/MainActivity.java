@@ -70,27 +70,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         findViewById(R.id.button_new_game).setOnClickListener(this);
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.sign_out, menu);
-//        return true;
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.sign_out_menu:
-//                mFirebaseAuth.signOut();
-//                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-//                mUsername = ANONYMOUS;
-//                startActivity(new Intent(this, SignInActivity.class));
-//                finish();
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -116,6 +95,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 finish();
                 break;
             case R.id.button_stats:
+                Intent intent = new Intent(MainActivity.this, StatsActivity.class);
+                intent.putExtra("win", 0);
+                intent.putExtra("username", mFirebaseUser.getEmail());
+                intent.putExtra("userId", mFirebaseUser.getUid());
+                startActivity(intent);
                 break;
         }
     }
