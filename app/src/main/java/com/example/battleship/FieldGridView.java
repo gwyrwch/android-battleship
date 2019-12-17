@@ -40,6 +40,10 @@ public class FieldGridView extends View implements UpdateListener {
         onUpdate();
     }
 
+    public Game getGame() {
+        return game;
+    }
+
     private MakeMoveHandler makeMoveHandler;
     public void setMakeMoveHandler(MakeMoveHandler h) {
         this.makeMoveHandler = h;

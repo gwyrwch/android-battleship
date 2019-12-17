@@ -26,6 +26,7 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
     FieldGridView gridView;
     private ValueEventListener mGameListener;
     private DatabaseReference mGameReference;
+    int role;
 
     ArrayList<Rect> ships;
 
@@ -46,7 +47,7 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
 
         Intent intent = getIntent();
         final String gameId = intent.getStringExtra("gameId");
-        int role = intent.getIntExtra("role", -1);
+        role = intent.getIntExtra("role", -1);
 
         if (gameId == null) throw new AssertionError("Game id is null");
         if (role == -1) throw new AssertionError("Role is -1");
@@ -151,7 +152,20 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
                 }
 
                 TextView v = findViewById(R.id.text_view_game_state);
-                v.setText(updated_game.gameState == Game.GameState.FIRST_MOVE ? "First player move" : "Second player move");
+
+                String move = (
+                        (
+                            role == 1 &&
+                            updated_game.gameState == Game.GameState.FIRST_MOVE
+                        ) ||
+                        (
+                            role == 2 &&
+                            updated_game.gameState == Game.GameState.SECOND_MOVE
+                        )
+                ) ? "Your move" : "Second player move";
+                System.out.println(role + " " + (updated_game.gameState == Game.GameState.FIRST_MOVE ? "true" : false));
+                v.setText(move);
+//                updated_game.gameState == Game.GameState.FIRST_MOVE ? "First move" : "Second player move"
 
                 v = findViewById(R.id.text_view_players_connected);
                 v.setText(updated_game.playersConnected + " players connected.");
@@ -161,7 +175,6 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
                 Log.w("TAG", "loadPost:onCancelled", databaseError.toException());
             }
         };
@@ -173,5 +186,13 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
     @Override
     public void makeMove(Game game, int i, int j) {
         mGameReference.setValue(game);
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mGameReference.child("playersConnected").setValue(1);
     }
 }
