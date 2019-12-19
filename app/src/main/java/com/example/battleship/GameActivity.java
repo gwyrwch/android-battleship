@@ -24,9 +24,10 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     FieldGridView gridView;
-    private ValueEventListener mGameListener;
     private DatabaseReference mGameReference;
     int role;
+
+    boolean finished = false;
 
     ArrayList<Rect> ships;
 
@@ -80,16 +81,23 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
         ValueEventListener gameListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if (finished) {
+                    return;
+                }
                 Game updated_game = dataSnapshot.getValue(Game.class);
 
                 if (updated_game == null) {
                     throw new AssertionError("Game is null");
                 }
 
-                if (updated_game.finished) {
+                if (updated_game.finished && !finished) {
+                    finished = true;
+
                     int winner;
                     if (updated_game.gameState == gridView.role) {
                         winner = 1;
+                        mGameReference.removeValue(); //removes game not id
+
                     } else {
                         winner = 2;
                     }
@@ -151,7 +159,7 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
                     return;
                 }
 
-                TextView v = findViewById(R.id.text_view_game_state);
+                TextView moveTextView = findViewById(R.id.text_view_game_state);
 
                 String move = (
                         (
@@ -164,11 +172,11 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
                         )
                 ) ? "Your move" : "Second player move";
                 System.out.println(role + " " + (updated_game.gameState == Game.GameState.FIRST_MOVE ? "true" : false));
-                v.setText(move);
+                moveTextView.setText(move);
 //                updated_game.gameState == Game.GameState.FIRST_MOVE ? "First move" : "Second player move"
 
-                v = findViewById(R.id.text_view_players_connected);
-                v.setText(updated_game.playersConnected + " players connected.");
+                TextView connectedTextView = findViewById(R.id.text_view_players_connected);
+                connectedTextView.setText(updated_game.playersConnected + " players connected.");
 
                 gridView.setGame(updated_game);
             }
@@ -192,7 +200,7 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        mGameReference.child("playersConnected").setValue(1);
+        if (!finished)
+            mGameReference.child("playersConnected").setValue(1);
     }
 }

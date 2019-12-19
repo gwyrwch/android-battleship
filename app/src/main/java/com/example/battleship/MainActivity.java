@@ -39,23 +39,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 
-        String mPhotoUrl;
-
         mUsername = ANONYMOUS;
 
-        // Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         if (mFirebaseUser == null) {
-            // Not signed in, launch the Sign In activity
             startActivity(new Intent(this, SignInActivity.class));
             finish();
             return;
         } else {
             mUsername = mFirebaseUser.getDisplayName();
-            if (mFirebaseUser.getPhotoUrl() != null) {
-                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
-            }
         }
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -63,9 +56,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
 
-        mSignOutButton = findViewById(R.id.button_sign_out);
-        mSignOutButton.setOnClickListener(this);
 
+        findViewById(R.id.button_sign_out).setOnClickListener(this);
         findViewById(R.id.button_stats).setOnClickListener(this);
         findViewById(R.id.button_new_game).setOnClickListener(this);
     }
@@ -92,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 break;
             case R.id.button_new_game:
                 startActivity(new Intent(this, GamePrepareActivity.class));
-                finish();
                 break;
             case R.id.button_stats:
                 Intent intent = new Intent(MainActivity.this, StatsActivity.class);

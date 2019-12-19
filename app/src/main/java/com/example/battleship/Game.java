@@ -26,15 +26,11 @@ public class Game {
     public int playersConnected;
     public boolean finished;
 
-//    public int askX, askY;
-//    public GameState playerAsked;
+
 
     public Game() {
         gameState = GameState.FIRST_MOVE;
         finished = false;
-
-//        askX = askY = -1;
-//        playerAsked = null;
 
         mField1 = new ArrayList<>();
         mField2 = new ArrayList<>();
@@ -51,6 +47,7 @@ public class Game {
             mField2.add(b);
         }
     }
+
 
     boolean makeMove(GameState role, int x, int y) {
         if (role == GameState.FIRST_MOVE) {

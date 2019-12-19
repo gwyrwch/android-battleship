@@ -1,10 +1,15 @@
 package com.example.battleship;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,9 +30,17 @@ public class GamePrepareActivity extends AppCompatActivity implements View.OnCli
 
     FieldGridView fieldGridView;
     private DatabaseReference mDatabase;
+    private DatabaseReference mGamePrepareReference;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
+
     private String myGameId;
+    private String gameId;
+
+    private EditText gameIdEditText;
+    private Button btnConnect;
+
+    DataSnapshot lastSnapshot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +53,54 @@ public class GamePrepareActivity extends AppCompatActivity implements View.OnCli
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        TextView v = findViewById(R.id.edit_text_game_id);
+        gameIdEditText = findViewById(R.id.edit_text_game_id);
+        btnConnect = findViewById(R.id.button_connect);
         myGameId = mFirebaseUser.getUid().substring(0, 5);
 
-        v.setText(myGameId);
+        gameIdEditText.setText(myGameId);
+        mGamePrepareReference = mDatabase.child("game");
+
+
+        mGamePrepareReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+             public void onDataChange(DataSnapshot snapshot) {
+                lastSnapshot = snapshot;
+                gameIdEditText.setText(gameIdEditText.getText());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        gameIdEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                System.out.println("Text changed");
+                if ((lastSnapshot != null && lastSnapshot.hasChild(s.toString()))) {
+                    btnConnect.setEnabled(true);
+                    btnConnect.setText("Connect to game");
+                }
+                else if(s.toString().equals(myGameId)) {
+                    btnConnect.setEnabled(true);
+                    btnConnect.setText("Create new game");
+                } else {
+                    btnConnect.setEnabled(false);
+                    btnConnect.setText("Connect to game");
+                }
+            }
+        });
 
         findViewById(R.id.button_rundomize).setOnClickListener(this);
         findViewById(R.id.button_connect).setOnClickListener(this);
@@ -69,20 +126,19 @@ public class GamePrepareActivity extends AppCompatActivity implements View.OnCli
                     return;
                 }
 
-                EditText gameIdEditText =  findViewById(R.id.edit_text_game_id);
-                String id = gameIdEditText.getText().toString();
+                gameId = gameIdEditText.getText().toString();
                 int role;
 
-                if (id.equals(myGameId)) {
+                if (gameId.equals(myGameId)) {
                     Toast.makeText(getApplicationContext(), "Creating new game", Toast.LENGTH_LONG).show();
                     role = 1;
                 } else {
-                    Toast.makeText(getApplicationContext(), "Connecting to the game " + id, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Connecting to the game " + gameId, Toast.LENGTH_LONG).show();
                     role = 2;
                 }
 
                 Intent intent = new Intent(GamePrepareActivity.this, GameActivity.class);
-                intent.putExtra("gameId", id);
+                intent.putExtra("gameId", gameId);
                 intent.putExtra("role", role);
                 intent.putExtra("myField", gameInitializer.getShips());
                 startActivity(intent);
