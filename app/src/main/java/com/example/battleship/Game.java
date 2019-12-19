@@ -1,7 +1,6 @@
 package com.example.battleship;
 
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.google.protobuf.Empty;
 
 import java.util.ArrayList;
 import java.util.List;

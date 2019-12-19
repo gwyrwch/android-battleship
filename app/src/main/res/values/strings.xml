@@ -2,4 +2,6 @@
     <string name="app_name">Battleship</string>
     <string name="winner">You are a winner!</string>
     <string name="loser">Don\'t be upset!</string>
+    <string name="connect_to_game">Connect to game</string>
+    <string name="create_new_game">Create new game</string>
 </resources>

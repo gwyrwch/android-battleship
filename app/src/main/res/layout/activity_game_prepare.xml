@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
-            android:text="#2281488"
+            android:text="00000"
             android:singleLine="true"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -63,7 +63,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
-            android:text="Create new game"
+            android:text="@string/create_new_game"
             android:id="@+id/button_connect"
             android:layout_marginStart="20dp"
             android:layout_height="wrap_content"

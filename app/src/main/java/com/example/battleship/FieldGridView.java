@@ -14,7 +14,7 @@ import android.view.View;
 import java.util.List;
 
 public class FieldGridView extends View implements UpdateListener {
-    Paint mFieldPaint, mBluePaint, mRedPaint, mShipPaint, mShipPaint2;
+    Paint mFieldPaint, mMissPaint, mHitPaint, mShipPaint, mShipPaint2;
     private RectF mFieldLeft = new RectF();
     private RectF mFieldRight = new RectF();
     int width, height;
@@ -38,10 +38,6 @@ public class FieldGridView extends View implements UpdateListener {
     public void setGame(Game game) {
         this.game = game;
         onUpdate();
-    }
-
-    public Game getGame() {
-        return game;
     }
 
     private MakeMoveHandler makeMoveHandler;
@@ -75,17 +71,17 @@ public class FieldGridView extends View implements UpdateListener {
         mShipPaint2.setStyle(Paint.Style.FILL);
 
 
-        mRedPaint = new Paint();
-        mRedPaint.setColor(Color.RED);
-        mRedPaint.setAntiAlias(true);
-        mRedPaint.setStyle(Paint.Style.STROKE);
-        mRedPaint.setStrokeWidth(10);
+        mHitPaint = new Paint();
+        mHitPaint.setColor(Color.RED);
+        mHitPaint.setAntiAlias(true);
+        mHitPaint.setStyle(Paint.Style.STROKE);
+        mHitPaint.setStrokeWidth(10);
 
-        mBluePaint = new Paint();
-        mBluePaint.setColor(Color.BLACK);
-        mBluePaint.setAntiAlias(true);
-        mBluePaint.setStyle(Paint.Style.STROKE);
-        mRedPaint.setStrokeWidth(7);
+        mMissPaint = new Paint();
+        mMissPaint.setColor(Color.BLACK);
+        mMissPaint.setAntiAlias(true);
+        mMissPaint.setStyle(Paint.Style.STROKE);
+        mHitPaint.setStrokeWidth(7);
 
         gameInit = args.getBoolean(R.styleable.FieldGridView_gameInitialize, false);
 
@@ -95,7 +91,6 @@ public class FieldGridView extends View implements UpdateListener {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
         width = getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec);
         height = getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec);
 
@@ -217,20 +212,20 @@ public class FieldGridView extends View implements UpdateListener {
 
     void drawHit(Canvas canvas, RectF rect, int x, int y) {
         canvas.drawLine(getCornerX(rect, x), getCornerY(rect, y),
-                getCornerX(rect, x + 1), getCornerY(rect, y + 1), mRedPaint);
+                getCornerX(rect, x + 1), getCornerY(rect, y + 1), mHitPaint);
 
         canvas.drawLine(getCornerX(rect, x + 1), getCornerY(rect, y),
-                getCornerX(rect, x), getCornerY(rect, y + 1), mRedPaint);
+                getCornerX(rect, x), getCornerY(rect, y + 1), mHitPaint);
     }
 
     void drawMiss(Canvas canvas, RectF rect, int x, int y) {
         canvas.drawLine(getCornerX(rect, x), getCornerY(rect, y),
-                getCornerX(rect, x + 1), getCornerY(rect, y + 1), mBluePaint);
+                getCornerX(rect, x + 1), getCornerY(rect, y + 1), mMissPaint);
 
         canvas.drawLine(getCornerX(rect, x + 1), getCornerY(rect, y),
-                getCornerX(rect, x), getCornerY(rect, y + 1), mBluePaint);
+                getCornerX(rect, x), getCornerY(rect, y + 1), mMissPaint);
 //        canvas.drawRect(getCornerX(rect, x), getCornerY(rect, y),
-//                getCornerX(rect, x + 1), getCornerY(rect, y + 1), mBluePaint);
+//                getCornerX(rect, x + 1), getCornerY(rect, y + 1), mMissPaint);
     }
 
     @Override
@@ -253,14 +248,14 @@ public class FieldGridView extends View implements UpdateListener {
                     x /= unitDistance;
                     y /= unitDistance;
 
-                    int i  = (int)(x);
-                    int j  = (int)(y);
+                    int i = (int)(x);
+                    int j = (int)(y);
 
                     if (game.gameState == role) {
                         boolean ok = game.makeMove(role, i, j);
 
                         if (makeMoveHandler != null && ok) {
-                            makeMoveHandler.makeMove(game, i, j);
+                            makeMoveHandler.makeMove(game);
                         }
                         onUpdate();
                     }

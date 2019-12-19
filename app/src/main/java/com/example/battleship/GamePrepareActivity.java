@@ -1,20 +1,16 @@
 package com.example.battleship;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -90,14 +86,14 @@ public class GamePrepareActivity extends AppCompatActivity implements View.OnCli
                 System.out.println("Text changed");
                 if ((lastSnapshot != null && lastSnapshot.hasChild(s.toString())) && !s.toString().equals(myGameId)) {
                     btnConnect.setEnabled(true);
-                    btnConnect.setText("Connect to game");
+                    btnConnect.setText(R.string.connect_to_game);
                 }
                 else if(s.toString().equals(myGameId)) {
                     btnConnect.setEnabled(true);
-                    btnConnect.setText("Create new game");
+                    btnConnect.setText(R.string.create_new_game);
                 } else {
                     btnConnect.setEnabled(false);
-                    btnConnect.setText("Connect to game");
+                    btnConnect.setText(R.string.connect_to_game);
                 }
             }
         });

@@ -1,6 +1,6 @@
 package com.example.battleship;
 
-        import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
 public class Stats {

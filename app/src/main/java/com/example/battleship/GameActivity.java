@@ -87,7 +87,8 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
                 Game updated_game = dataSnapshot.getValue(Game.class);
 
                 if (updated_game == null) {
-                    throw new AssertionError("Game is null");
+                    return;
+//                    throw new AssertionError("Game is null"); //fixme:
                 }
 
                 if (updated_game.finished && !finished) {
@@ -173,7 +174,6 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
                 ) ? "Your move" : "Second player move";
                 System.out.println(role + " " + (updated_game.gameState == Game.GameState.FIRST_MOVE ? "true" : false));
                 moveTextView.setText(move);
-//                updated_game.gameState == Game.GameState.FIRST_MOVE ? "First move" : "Second player move"
 
                 TextView connectedTextView = findViewById(R.id.text_view_players_connected);
                 connectedTextView.setText(updated_game.playersConnected + " players connected.");
@@ -192,7 +192,7 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
 
 
     @Override
-    public void makeMove(Game game, int i, int j) {
+    public void makeMove(Game game) {
         mGameReference.setValue(game);
     }
 
@@ -202,5 +202,9 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
         super.onDestroy();
         if (!finished)
             mGameReference.child("playersConnected").setValue(1);
+
+        if (role == 1)
+            mGameReference.removeValue();
+
     }
 }
