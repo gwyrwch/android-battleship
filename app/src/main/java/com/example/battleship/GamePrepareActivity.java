@@ -88,7 +88,7 @@ public class GamePrepareActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void afterTextChanged(Editable s) {
                 System.out.println("Text changed");
-                if ((lastSnapshot != null && lastSnapshot.hasChild(s.toString()))) {
+                if ((lastSnapshot != null && lastSnapshot.hasChild(s.toString())) && !s.toString().equals(myGameId)) {
                     btnConnect.setEnabled(true);
                     btnConnect.setText("Connect to game");
                 }

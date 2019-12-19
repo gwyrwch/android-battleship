@@ -1,32 +1,25 @@
 package com.example.battleship;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class StatsActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
-    private ValueEventListener mGameListener;
     private DatabaseReference mStatsReference;
-    private TextView usernameTextView, winsTextView, lossesTextView;
+    private TextView usernameTextView, winsTextView, lossesTextView, resultTextView;
     boolean loaded;
     int wins;
 
@@ -45,10 +38,13 @@ public class StatsActivity extends AppCompatActivity {
         usernameTextView = findViewById(R.id.usernameTextView);
         winsTextView = findViewById(R.id.winsTextView);
         lossesTextView = findViewById(R.id.lossesTextView);
+        resultTextView = findViewById(R.id.resultTextView);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        if (userId == null) throw new AssertionError("Role is -1");
         mStatsReference = mDatabase.child("stats").child(userId);
         loaded = false;
 
@@ -64,13 +60,13 @@ public class StatsActivity extends AppCompatActivity {
                     stats.numberOfLosses = 0;
                 }
 
-                if (loaded) {
-                    return;
-                } else {
+                if (!loaded) {
                     loaded = true;
                     if (wins == 1) {
                         stats.numberOfWins += 1;
+                        resultTextView.setText(R.string.winner);
                     } else if (wins == 2) {
+                        resultTextView.setText(R.string.loser);
                         stats.numberOfLosses += 1;
                     }
                     mStatsReference.setValue(stats);

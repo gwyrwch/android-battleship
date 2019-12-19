@@ -31,11 +31,9 @@ public class SignInActivity extends AppCompatActivity implements
     private static final int RC_SIGN_IN = 9001;
 
     private GoogleSignInButton mSignInButton;
-    private Button mSignInButton2;
 
     private GoogleApiClient mGoogleApiClient;
 
-    // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
 
     @Override
@@ -43,13 +41,8 @@ public class SignInActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        // Assign fields
         mSignInButton = (GoogleSignInButton) findViewById(R.id.button_sign_in);
-//        mSignInButton2 =  findViewById(R.id.button_sign_in2);
-
-        // Set click listeners
         mSignInButton.setOnClickListener(this);
-//        mSignInButton2.setOnClickListener(this);
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -62,7 +55,6 @@ public class SignInActivity extends AppCompatActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        // Initialize FirebaseAuth
         mFirebaseAuth = FirebaseAuth.getInstance();
     }
 
@@ -90,11 +82,11 @@ public class SignInActivity extends AppCompatActivity implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 GoogleSignInAccount account = result.getSignInAccount();
+                if (account == null) throw new AssertionError("Role is -1");
                 firebaseAuthWithGoogle(account);
             } else {
                 Log.e(TAG, "Google Sign-In failed." + result.toString());
@@ -106,26 +98,26 @@ public class SignInActivity extends AppCompatActivity implements
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mFirebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.d(TAG, "WAT");
-                        } else {
-                            Log.d(TAG, "i am working");
-                        }
-                        Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                if (!task.isSuccessful()) {
+                    Log.d(TAG, "Task firebaseAuthWithGoogle failed");
+                } else {
+                    Log.d(TAG, "i am working");
+                }
+                Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
 
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInWithCredential", task.getException());
-                            Toast.makeText(SignInActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.d(TAG, "i am working");
-                            startActivity(new Intent(SignInActivity.this, MainActivity.class));
-                            finish();
-                        }
-                    }
-                });
+                if (!task.isSuccessful()) {
+                    Log.w(TAG, "signInWithCredential", task.getException());
+                    Toast.makeText(SignInActivity.this, "Authentication failed.",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.d(TAG, "i am working");
+                    startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                    finish();
+                }
+                }
+            });
     }
 }

@@ -63,7 +63,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
-            android:text="Connect to game"
+            android:text="Create new game"
             android:id="@+id/button_connect"
             android:layout_marginStart="20dp"
             android:layout_height="wrap_content"

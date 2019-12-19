@@ -79,12 +79,13 @@ public class FieldGridView extends View implements UpdateListener {
         mRedPaint.setColor(Color.RED);
         mRedPaint.setAntiAlias(true);
         mRedPaint.setStyle(Paint.Style.STROKE);
-        mRedPaint.setStrokeWidth(5);
+        mRedPaint.setStrokeWidth(10);
 
         mBluePaint = new Paint();
-        mBluePaint.setColor(args.getColor(R.styleable.FieldGridView_fieldColor, 0));
+        mBluePaint.setColor(Color.BLACK);
         mBluePaint.setAntiAlias(true);
-        mBluePaint.setStyle(Paint.Style.FILL);
+        mBluePaint.setStyle(Paint.Style.STROKE);
+        mRedPaint.setStrokeWidth(7);
 
         gameInit = args.getBoolean(R.styleable.FieldGridView_gameInitialize, false);
 
@@ -203,7 +204,6 @@ public class FieldGridView extends View implements UpdateListener {
                     for (Rect ship : gameInitializer.getShips()) {
                         drawShip(canvas, mFieldLeft, ship.left, ship.top, ship.right, ship.bottom, mShipPaint);
                         drawShip(canvas, mFieldLeft, ship.left, ship.top, ship.right, ship.bottom, mShipPaint2);
-
                     }
                 }
             }
@@ -240,12 +240,8 @@ public class FieldGridView extends View implements UpdateListener {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-//                if (mOnSwagPointsChangeListener != null)
-//                    mOnSwagPointsChangeListener.onStartTrackingTouch(this);
-////					updateOnTouch(event);
-                break;
+            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_MOVE:
-//                updateOnTouch(event);
                 break;
             case MotionEvent.ACTION_UP:
                 if (mFieldRight.contains(event.getX(), event.getY())) {
@@ -269,8 +265,6 @@ public class FieldGridView extends View implements UpdateListener {
                         onUpdate();
                     }
                 }
-                break;
-            case MotionEvent.ACTION_CANCEL:
                 break;
         }
         return true;

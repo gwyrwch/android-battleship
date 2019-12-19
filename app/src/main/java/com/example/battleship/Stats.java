@@ -8,14 +8,10 @@ public class Stats {
     public int numberOfWins;
     public int numberOfLosses;
 
-    public boolean win;
-
     public Stats() {
         username = "none";
         numberOfLosses = 0;
         numberOfWins = 0;
-
-        win = false;
     }
 
 }
