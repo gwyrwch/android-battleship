@@ -14,7 +14,7 @@ import android.view.View;
 import java.util.List;
 
 public class FieldGridView extends View implements UpdateListener {
-    Paint mFieldPaint, mBluePaint, mRedPaint, mShipPaint;
+    Paint mFieldPaint, mBluePaint, mRedPaint, mShipPaint, mShipPaint2;
     private RectF mFieldLeft = new RectF();
     private RectF mFieldRight = new RectF();
     int width, height;
@@ -68,6 +68,12 @@ public class FieldGridView extends View implements UpdateListener {
         mShipPaint.setAntiAlias(true);
         mShipPaint.setStyle(Paint.Style.STROKE);
         mShipPaint.setStrokeWidth(10);
+
+        mShipPaint2 = new Paint();
+        mShipPaint2.setColor(Color.argb(15, 255, 59, 48));
+        mShipPaint2.setAntiAlias(true);
+        mShipPaint2.setStyle(Paint.Style.FILL);
+
 
         mRedPaint = new Paint();
         mRedPaint.setColor(Color.RED);
@@ -134,7 +140,8 @@ public class FieldGridView extends View implements UpdateListener {
 
             if (role != null && myShips != null) {
                 for (Rect ship : myShips) {
-                    drawShip(canvas, mFieldLeft, ship.left, ship.top, ship.right, ship.bottom);
+                    drawShip(canvas, mFieldLeft, ship.left, ship.top, ship.right, ship.bottom, mShipPaint);
+                    drawShip(canvas, mFieldLeft, ship.left, ship.top, ship.right, ship.bottom, mShipPaint2);
                 }
             } else {
                 System.out.println("ships or role null");
@@ -188,21 +195,24 @@ public class FieldGridView extends View implements UpdateListener {
                 }
 
                 if (countThisShip != 0) {
-                    drawShip(canvas, mFieldRight, i * 2 - 1, 2, i * 2 - 1, 2 + i - 1);
+                    drawShip(canvas, mFieldRight, i * 2 - 1, 2, i * 2 - 1, 2 + i - 1, mShipPaint);
+                    drawShip(canvas, mFieldRight, i * 2 - 1, 2, i * 2 - 1, 2 + i - 1, mShipPaint2);
                 }
 
                 if (gameInitializer != null) {
                     for (Rect ship : gameInitializer.getShips()) {
-                        drawShip(canvas, mFieldLeft, ship.left, ship.top, ship.right, ship.bottom);
+                        drawShip(canvas, mFieldLeft, ship.left, ship.top, ship.right, ship.bottom, mShipPaint);
+                        drawShip(canvas, mFieldLeft, ship.left, ship.top, ship.right, ship.bottom, mShipPaint2);
+
                     }
                 }
             }
         }
     }
 
-    void drawShip(Canvas canvas, RectF rect, int x1, int y1, int x2, int y2) {
+    void drawShip(Canvas canvas, RectF rect, int x1, int y1, int x2, int y2, Paint p) {
         canvas.drawRoundRect(getCornerX(rect, x1), getCornerY(rect, y1), getCornerX(rect, x2 + 1), getCornerY(rect, y2 + 1),
-                50, 50, mShipPaint);
+                50, 50, p);
     }
 
     void drawHit(Canvas canvas, RectF rect, int x, int y) {
@@ -214,8 +224,13 @@ public class FieldGridView extends View implements UpdateListener {
     }
 
     void drawMiss(Canvas canvas, RectF rect, int x, int y) {
-        canvas.drawRect(getCornerX(rect, x), getCornerY(rect, y),
+        canvas.drawLine(getCornerX(rect, x), getCornerY(rect, y),
                 getCornerX(rect, x + 1), getCornerY(rect, y + 1), mBluePaint);
+
+        canvas.drawLine(getCornerX(rect, x + 1), getCornerY(rect, y),
+                getCornerX(rect, x), getCornerY(rect, y + 1), mBluePaint);
+//        canvas.drawRect(getCornerX(rect, x), getCornerY(rect, y),
+//                getCornerX(rect, x + 1), getCornerY(rect, y + 1), mBluePaint);
     }
 
     @Override

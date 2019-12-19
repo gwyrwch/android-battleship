@@ -5,16 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@drawable/background">
+    android:background="@drawable/background"
+    >
 
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        android:background="@color/colorFade"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+
         >
 
         <LinearLayout
@@ -31,7 +33,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#3465a4"
+                android:backgroundTint="@color/colorPrimary"
                 android:text="NEW GAME"
                 android:textColor="#FFF"
                 android:textSize="24dp"
@@ -49,7 +51,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#3465a4"
+                android:backgroundTint="@color/colorPrimary"
                 android:text="STATISTICS"
                 android:textColor="#FFF"
                 android:textSize="24dp"
@@ -66,7 +68,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#3465a4"
+                android:backgroundTint="@color/colorPrimary"
                 android:text="SIGN OUT"
                 android:textColor="#FFF"
                 android:textSize="24dp"
