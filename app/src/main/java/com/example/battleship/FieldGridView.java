@@ -107,7 +107,7 @@ public class FieldGridView extends View implements UpdateListener {
     }
 
     float getCornerX(RectF rect, int x) {
-        return (float)x / 10 * rect.width() + rect.left;
+        return (float)x * rect.width() / 10 + rect.left;
     }
 
     float getCornerY(RectF rect, int y) {
@@ -224,8 +224,6 @@ public class FieldGridView extends View implements UpdateListener {
 
         canvas.drawLine(getCornerX(rect, x + 1), getCornerY(rect, y),
                 getCornerX(rect, x), getCornerY(rect, y + 1), mMissPaint);
-//        canvas.drawRect(getCornerX(rect, x), getCornerY(rect, y),
-//                getCornerX(rect, x + 1), getCornerY(rect, y + 1), mMissPaint);
     }
 
     @Override

@@ -176,7 +176,8 @@ public class GameActivity extends AppCompatActivity implements MakeMoveHandler {
                 moveTextView.setText(move);
 
                 TextView connectedTextView = findViewById(R.id.text_view_players_connected);
-                connectedTextView.setText(updated_game.playersConnected + " players connected.");
+                String playersConnected = updated_game.playersConnected + " players connected.";
+                connectedTextView.setText(playersConnected);
 
                 gridView.setGame(updated_game);
             }

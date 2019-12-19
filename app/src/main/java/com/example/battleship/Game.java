@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @IgnoreExtraProperties
-public class Game {
+class Game {
     enum CellState {
         EMPTY,
         HIT,
@@ -19,15 +19,15 @@ public class Game {
         SECOND_MOVE
     }
 
-    public GameState gameState;
+    GameState gameState;
 
-    public List<List<CellState>> mField1, mField2;
-    public int playersConnected;
-    public boolean finished;
+    List<List<CellState>> mField1, mField2;
+    int playersConnected;
+    boolean finished;
 
 
 
-    public Game() {
+    Game() {
         gameState = GameState.FIRST_MOVE;
         finished = false;
 

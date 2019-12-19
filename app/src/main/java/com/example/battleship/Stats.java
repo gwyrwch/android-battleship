@@ -3,12 +3,12 @@ package com.example.battleship;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
-public class Stats {
-    public String username;
-    public int numberOfWins;
-    public int numberOfLosses;
+class Stats {
+    String username;
+    int numberOfWins;
+    int numberOfLosses;
 
-    public Stats() {
+    Stats() {
         username = "none";
         numberOfLosses = 0;
         numberOfWins = 0;

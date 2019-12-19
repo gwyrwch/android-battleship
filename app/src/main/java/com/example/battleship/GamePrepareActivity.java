@@ -59,7 +59,7 @@ public class GamePrepareActivity extends AppCompatActivity implements View.OnCli
 
         mGamePrepareReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-             public void onDataChange(DataSnapshot snapshot) {
+             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 lastSnapshot = snapshot;
                 gameIdEditText.setText(gameIdEditText.getText());
             }

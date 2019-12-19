@@ -29,8 +29,6 @@ public class SignInActivity extends AppCompatActivity implements
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
 
-    private GoogleSignInButton mSignInButton;
-
     private GoogleApiClient mGoogleApiClient;
 
     private FirebaseAuth mFirebaseAuth;
@@ -40,10 +38,10 @@ public class SignInActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        mSignInButton = (GoogleSignInButton) findViewById(R.id.button_sign_in);
+        GoogleSignInButton mSignInButton = findViewById(R.id.button_sign_in);
         mSignInButton.setOnClickListener(this);
 
-        // Configure Google Sign In
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -59,10 +57,8 @@ public class SignInActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.button_sign_in:
-                signIn();
-                break;
+        if (v.getId() == R.id.button_sign_in) {
+            signIn();
         }
     }
 

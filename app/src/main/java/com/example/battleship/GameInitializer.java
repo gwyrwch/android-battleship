@@ -5,17 +5,17 @@ import android.graphics.Rect;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class GameInitializer {
+class GameInitializer {
     private ArrayList<Rect> ships;
     private UpdateListener updateListener;
 
-    public ArrayList<Rect> getShips() {
+    ArrayList<Rect> getShips() {
         return ships;
     }
 
     private int[] leftCount;
 
-    public int getLeftCount(int i) {
+    int getLeftCount(int i) {
         return leftCount[i - 1];
     }
 
@@ -37,7 +37,7 @@ public class GameInitializer {
         return s2.intersects(s1.left - 2, s1.top - 2, s1.right + 2, s1.bottom + 2);
     }
 
-    public void randomShuffle() {
+    void randomShuffle() {
         if (canStart()) {
              init();
         }
@@ -54,7 +54,7 @@ public class GameInitializer {
                         x, y,
                         x + (dir == 0 ? i : 0),
                         y + (dir == 1 ? i : 0)
-                    ); // generate ship rotation
+                    );
 
                     if (ship.right >= 10 || ship.bottom >= 10) {
                         continue;
@@ -82,11 +82,11 @@ public class GameInitializer {
         }
     }
 
-    public boolean canStart() {
+    boolean canStart() {
         return leftCount[0] + leftCount[1] + leftCount[2] + leftCount[3] == 0;
     }
 
-    public void setUpdateListener(UpdateListener l) {
+    void setUpdateListener(UpdateListener l) {
         this.updateListener = l;
     }
 }

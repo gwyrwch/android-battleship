@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,7 +51,7 @@ public class StatsActivity extends AppCompatActivity {
 
         mStatsReference.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
             @Override
-            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot) {
                 Stats stats = dataSnapshot.getValue(Stats.class);
 
                 if (stats == null)  {
@@ -82,8 +83,8 @@ public class StatsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
                 Log.w("TAG", "loadPost:onCancelled", databaseError.toException());
             }
         });
